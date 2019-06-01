@@ -10,7 +10,9 @@ public class BlockController : MonoBehaviour
     private float intarval = 0.7f;
     [SerializeField]
     public GameObject[] blocks;
-    public bool fallstate = false;
+    public bool fallState = false;
+    public bool sideMoveState = false;
+    public bool rotatinState = false;
     public int myIndex;
     private int myState = 0;
     public int[,] blockPosNow;
@@ -34,31 +36,47 @@ public class BlockController : MonoBehaviour
     //移動処理
     private void Fall()
     {
-        if (fallstate)
+        if (fallState)
         {
             time += Time.deltaTime;
             if (time >= tmpTime)
             {
-                tmpTime = time + intarval;
-                blockManager.PosUpdate();
-                this.gameObject.transform.localPosition = new Vector3(this.gameObject.transform.localPosition.x,
-                                                                      this.gameObject.transform.localPosition.y - 1,
-                                                                      this.gameObject.transform.localPosition.z);
-            }
+                if (blockManager.PosUpdateF())
+                {
+                    tmpTime = time + intarval;
+                    this.gameObject.transform.localPosition = new Vector3(this.gameObject.transform.localPosition.x,
+                                                                          this.gameObject.transform.localPosition.y - 1,
+                                                                          this.gameObject.transform.localPosition.z);
+                }
+            }    
+        }
 
+        if (sideMoveState)
+        {
             if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
-                this.gameObject.transform.localPosition = new Vector3(this.gameObject.transform.localPosition.x - 1,
+                if (blockManager.PosUpdateS() == (int)BlockManager.SideMoveStop.Move || blockManager.PosUpdateS() == (int)BlockManager.SideMoveStop.Rstop)
+                {
+                    this.gameObject.transform.localPosition = new Vector3(this.gameObject.transform.localPosition.x - 1,
                                                                       this.gameObject.transform.localPosition.y,
                                                                       this.gameObject.transform.localPosition.z);
+                }
+                
             }
             else if (Input.GetKeyDown(KeyCode.RightArrow))
             {
-                this.gameObject.transform.localPosition = new Vector3(this.gameObject.transform.localPosition.x + 1,
+                if (blockManager.PosUpdateS() == (int)BlockManager.SideMoveStop.Move || blockManager.PosUpdateS() == (int)BlockManager.SideMoveStop.Lstop)
+                {
+                    this.gameObject.transform.localPosition = new Vector3(this.gameObject.transform.localPosition.x + 1,
                                                                       this.gameObject.transform.localPosition.y,
                                                                       this.gameObject.transform.localPosition.z);
+                }
+                
             }
-            
+        }
+
+        if (rotatinState)
+        {
             switch (myIndex)
             {
                 case 1:
@@ -92,6 +110,7 @@ public class BlockController : MonoBehaviour
                     blocks[0].transform.localPosition = new Vector3(0, -1, 0);
                     blocks[2].transform.localPosition = new Vector3(0, 1, 0);
                     blocks[3].transform.localPosition = new Vector3(-1, 0, 0);
+                    blockManager.RotationAdjust();
                 }
                 else if (Input.GetKeyDown(KeyCode.X))
                 {
@@ -100,6 +119,7 @@ public class BlockController : MonoBehaviour
                     blocks[0].transform.localPosition = new Vector3(0, 1, 0);
                     blocks[2].transform.localPosition = new Vector3(0, -1, 0);
                     blocks[3].transform.localPosition = new Vector3(1, 0, 0);
+                    blockManager.RotationAdjust();
                 }
                 break;
             case 1:
@@ -110,6 +130,7 @@ public class BlockController : MonoBehaviour
                     blocks[0].transform.localPosition = new Vector3(-1, 0, 0);
                     blocks[2].transform.localPosition = new Vector3(1, 0, 0);
                     blocks[3].transform.localPosition = new Vector3(0, 1, 0);
+                    blockManager.RotationAdjust();
                 }
                 else if (Input.GetKeyDown(KeyCode.X))
                 {
@@ -118,6 +139,7 @@ public class BlockController : MonoBehaviour
                     blocks[0].transform.localPosition = new Vector3(1, 0, 0);
                     blocks[2].transform.localPosition = new Vector3(-1, 0, 0);
                     blocks[3].transform.localPosition = new Vector3(0, -1, 0);
+                    blockManager.RotationAdjust();
                 }
                 break;
             case 2:
@@ -128,6 +150,7 @@ public class BlockController : MonoBehaviour
                     blocks[0].transform.localPosition = new Vector3(0, 1, 0);
                     blocks[2].transform.localPosition = new Vector3(0, -1, 0);
                     blocks[3].transform.localPosition = new Vector3(1, 0, 0);
+                    blockManager.RotationAdjust();
                 }
                 else if (Input.GetKeyDown(KeyCode.X))
                 {
@@ -136,6 +159,7 @@ public class BlockController : MonoBehaviour
                     blocks[0].transform.localPosition = new Vector3(0, -1, 0);
                     blocks[2].transform.localPosition = new Vector3(0, 1, 0);
                     blocks[3].transform.localPosition = new Vector3(-1, 0, 0);
+                    blockManager.RotationAdjust();
                 }
                 break;
             case 3:
@@ -146,6 +170,7 @@ public class BlockController : MonoBehaviour
                     blocks[0].transform.localPosition = new Vector3(1, 0, 0);
                     blocks[2].transform.localPosition = new Vector3(-1, 0, 0);
                     blocks[3].transform.localPosition = new Vector3(0, -1, 0);
+                    blockManager.RotationAdjust();
                 }
                 else if (Input.GetKeyDown(KeyCode.X))
                 {
@@ -154,6 +179,7 @@ public class BlockController : MonoBehaviour
                     blocks[0].transform.localPosition = new Vector3(-1, 0, 0);
                     blocks[2].transform.localPosition = new Vector3(1, 0, 0);
                     blocks[3].transform.localPosition = new Vector3(0, 1, 0);
+                    blockManager.RotationAdjust();
                 }
                 break;
         }

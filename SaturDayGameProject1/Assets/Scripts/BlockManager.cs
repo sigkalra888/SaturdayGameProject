@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BlockManager : MonoBehaviour
 {
@@ -25,6 +26,9 @@ public class BlockManager : MonoBehaviour
         Lstop,
         RLstop
     }
+
+    [SerializeField]
+    private Text[] text;
 
     private int[,] stage = new int[21, 10]
     {
@@ -81,6 +85,7 @@ public class BlockManager : MonoBehaviour
         blockPre.GetComponent<BlockController>().sideMoveState = true;
         blockPre.GetComponent<BlockController>().fallState = true;
         blockPre.GetComponent<BlockController>().rotatinState = true;
+        blockPre.GetComponent<BlockController>().kidou = true;
         block = blockPre;
         state = State.fall;
        
@@ -222,26 +227,26 @@ public class BlockManager : MonoBehaviour
         {
             if ((int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.y + (int)block.transform.localPosition.y < 0)
             {
-                stage[((int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.y + (int)block.transform.localPosition.y) * -1,
-                ((int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.x + (int)block.transform.localPosition.x) * -1] = 9;
+                stage[((int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.y + (int)block.transform.localPosition.y) * -1 + 1,
+                ((int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.x + (int)block.transform.localPosition.x) + 5] = 9;
             }
             else
             {
-                stage[(int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.y + (int)block.transform.localPosition.y,
-                ((int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.x + (int)block.transform.localPosition.x) * -1] = 9;
+                stage[(int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.y + (int)block.transform.localPosition.y + 1,
+                ((int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.x + (int)block.transform.localPosition.x) + 5] = 9;
             }
         }
         else
         {
             if ((int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.y + (int)block.transform.localPosition.y < 0)
             {
-                stage[((int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.y + (int)block.transform.localPosition.y) * -1,
-                ((int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.x + (int)block.transform.localPosition.x)] = 9;
+                stage[((int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.y + (int)block.transform.localPosition.y) * -1 + 1,
+                ((int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.x + (int)block.transform.localPosition.x) + 5] = 9;
             }
             else
             {
-                stage[(int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.y + (int)block.transform.localPosition.y,
-                (int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.x + (int)block.transform.localPosition.x] = 9;
+                stage[(int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.y + (int)block.transform.localPosition.y + 1,
+                (int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.x + (int)block.transform.localPosition.x + 5] = 9;
             }
         }
     }
@@ -252,22 +257,28 @@ public class BlockManager : MonoBehaviour
         {
             if ((int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.y + (int)block.transform.localPosition.y < 0)
             {
-                if (stage[((int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.y + (int)block.transform.localPosition.y) * -1,
-                    ((int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.x + (int)block.transform.localPosition.x) * -1] != 9)
+                if (stage[((int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.y + (int)block.transform.localPosition.y) * -1 + 1,
+                    ((int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.x + (int)block.transform.localPosition.x) + 5] != 9)
                 {
-                    stage[((int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.y + (int)block.transform.localPosition.y) * -1,
-                    ((int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.x + (int)block.transform.localPosition.x) * -1] = block.GetComponent<BlockController>().myIndex;
+                    stage[((int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.y + (int)block.transform.localPosition.y) * -1 + 2,
+                    ((int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.x + (int)block.transform.localPosition.x) + 5] = 0;
+
+                    stage[((int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.y + (int)block.transform.localPosition.y) * -1 + 1,
+                    ((int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.x + (int)block.transform.localPosition.x) + 5] = block.GetComponent<BlockController>().myIndex;
                     return true;
                 }
                 return false;
             }
             else
             {
-                if (stage[(int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.y + (int)block.transform.localPosition.y,
-                ((int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.x + (int)block.transform.localPosition.x) * -1] != 9)
+                if (stage[(int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.y + (int)block.transform.localPosition.y + 1,
+                ((int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.x + (int)block.transform.localPosition.x) + 5] != 9)
                 {
-                    stage[(int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.y + (int)block.transform.localPosition.y,
-                    ((int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.x + (int)block.transform.localPosition.x) * -1] = block.GetComponent<BlockController>().myIndex;
+                    stage[(int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.y + (int)block.transform.localPosition.y + 2,
+                    ((int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.x + (int)block.transform.localPosition.x) + 5] = 0;
+
+                    stage[(int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.y + (int)block.transform.localPosition.y + 1,
+                    ((int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.x + (int)block.transform.localPosition.x) + 5] = block.GetComponent<BlockController>().myIndex;
                     return true;
                 }
                 return false;
@@ -277,22 +288,28 @@ public class BlockManager : MonoBehaviour
         {
             if ((int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.y + (int)block.transform.localPosition.y < 0)
             {
-                if (stage[((int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.y + (int)block.transform.localPosition.y) * -1,
-                ((int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.x + (int)block.transform.localPosition.x)] != 9)
+                if (stage[((int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.y + (int)block.transform.localPosition.y) * -1 + 1,
+                ((int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.x + (int)block.transform.localPosition.x) + 5] != 9)
                 {
-                    stage[((int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.y + (int)block.transform.localPosition.y) * -1,
-                    ((int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.x + (int)block.transform.localPosition.x)] = block.GetComponent<BlockController>().myIndex;
+                    stage[((int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.y + (int)block.transform.localPosition.y) * -1 + 2,
+                    ((int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.x + (int)block.transform.localPosition.x) + 5] = 0;
+
+                    stage[((int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.y + (int)block.transform.localPosition.y) * -1 + 1,
+                    ((int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.x + (int)block.transform.localPosition.x) + 5] = block.GetComponent<BlockController>().myIndex;
                     return true;
                 }
                 return false;
             }
             else
             {
-                if (stage[(int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.y + (int)block.transform.localPosition.y,
-                (int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.x + (int)block.transform.localPosition.x] != 9)
+                if (stage[(int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.y + (int)block.transform.localPosition.y + 1,
+                (int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.x + (int)block.transform.localPosition.x + 5] != 9)
                 {
-                    stage[(int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.y + (int)block.transform.localPosition.y,
-                    (int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.x + (int)block.transform.localPosition.x] = block.GetComponent<BlockController>().myIndex;
+                    stage[(int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.y + (int)block.transform.localPosition.y + 1,
+                    ((int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.x + (int)block.transform.localPosition.x) + 5] = block.GetComponent<BlockController>().myIndex;
+
+                    stage[(int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.y + (int)block.transform.localPosition.y + 1,
+                    ((int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.x + (int)block.transform.localPosition.x) + 5] = block.GetComponent<BlockController>().myIndex;
                     return true;
                 }
                 return false;
@@ -309,6 +326,7 @@ public class BlockManager : MonoBehaviour
         block.GetComponent<BlockController>().sideMoveState = true;
         block.GetComponent<BlockController>().fallState = true;
         block.GetComponent<BlockController>().rotatinState = true;
+        block.GetComponent<BlockController>().kidou = true;
         stockBlocks.RemoveAt(0);
         for (int i = 0; i < stockBlocks.Count; i++)
         {
@@ -323,7 +341,7 @@ public class BlockManager : MonoBehaviour
         {
             for (int j = 0; j < 10; j++)
             {
-                Debug.Log(i + "," + j + ":" + stage[i, j]);
+                text[i * 10 + j].text = stage[i, j].ToString();
             }
         }
     }

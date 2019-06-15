@@ -13,6 +13,7 @@ public class BlockController : MonoBehaviour
     public bool fallState = false;
     public bool sideMoveState = false;
     public bool rotatinState = false;
+    public bool kidou = false;
     public int myIndex;
     private int myState = 0;
     public int[,] blockPosNow;
@@ -30,6 +31,7 @@ public class BlockController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!kidou) { return; }
         Fall();
     }
 

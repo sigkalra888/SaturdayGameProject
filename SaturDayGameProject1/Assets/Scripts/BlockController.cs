@@ -6,8 +6,6 @@ public class BlockController : MonoBehaviour
 {
     public BlockManager blockManager;
     private float time;
-    private float tmpTime = 0.7f;
-    private float intarval = 0.7f;
     [SerializeField]
     public GameObject[] blocks;
     public bool fallState = false;
@@ -41,14 +39,18 @@ public class BlockController : MonoBehaviour
         if (fallState)
         {
             time += Time.deltaTime;
-            if (time >= tmpTime)
+            if (time >= blockManager.tmpTime)
             {
                 if (blockManager.PosUpdateF())
                 {
-                    tmpTime = time + intarval;
+                    blockManager.tmpTime = time + blockManager.intarval;
                     this.gameObject.transform.localPosition = new Vector3(this.gameObject.transform.localPosition.x,
                                                                           this.gameObject.transform.localPosition.y - 1,
                                                                           this.gameObject.transform.localPosition.z);
+                }
+                for (int i = 0; i < 4; ++i)
+                {
+                    blockManager.BlockSetForStage(i);
                 }
             }    
         }

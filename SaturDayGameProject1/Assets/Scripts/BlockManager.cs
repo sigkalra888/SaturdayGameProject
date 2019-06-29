@@ -13,11 +13,22 @@ public class BlockManager : MonoBehaviour
     private GameObject block;
 
     public float tmpTime;
+    private float tmpTime2;
     public float intarval;
+    private float intarval2 = 0.1f;
 
     private int x, y;
     private int adjustX = 5;
     private int adjustY = 2;
+
+    public struct TmpPos
+    {
+        public int x;
+        public int y;
+    }
+
+    TmpPos[] tPos = new TmpPos[4];
+
     public enum State
     {
         fall,
@@ -32,9 +43,8 @@ public class BlockManager : MonoBehaviour
         Lstop,
         RLstop
     }
-
-    [SerializeField]
-    private Text[] text;
+    
+    public Text[] text;
 
     private int[,] stage = new int[21, 10]
     {
@@ -81,11 +91,16 @@ public class BlockManager : MonoBehaviour
             NextBlock();
         }
 
+        if (time >= tmpTime2)
+        {
+            TextPrint();
+            tmpTime2 = time + intarval2;
+        }
+
         //prefabのX,Y座標
         if(block == null) { return; }
         x = (int)block.transform.localPosition.x;
         y = (int)block.transform.localPosition.y;
-        Debug.Log(stage[17,5]);
         Debug.Log(BlockHighP((int)block.GetComponent<BlockController>().blocks[3].transform.localPosition.y) + ":" + ((int)block.GetComponent<BlockController>().blocks[3].transform.localPosition.x + x + 5));
     }
 
@@ -105,9 +120,10 @@ public class BlockManager : MonoBehaviour
         y = (int)block.transform.localPosition.y;
         for (int i = 0; i < 4; i++)
         {
+            tPos[i].x = ((int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.x + x) + adjustX;
+            tPos[i].y = BlockHighP((int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.y);
             BlockSetForStage(i);
         }
-        TextPrint();
 
     }
 
@@ -216,7 +232,6 @@ public class BlockManager : MonoBehaviour
                 return false;
             }
         }
-        TextPrint();
         return true;
     }
 
@@ -242,16 +257,9 @@ public class BlockManager : MonoBehaviour
         int mx = (int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.x;
         int my = (int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.y;
 
-        if (my + y < 0)
-        {
-            stage[BlockHighM(my) - 1, (mx + x) + adjustX] = 0;
-            stage[BlockHighM(my), (mx + x) + adjustX] = 9;
-        }
-        else
-        {
-            stage[BlockHighP(my) - 1, (mx + x) + adjustX] = 0;
-            stage[BlockHighP(my), (mx + x) + adjustX] = 9;
-        }
+        stage[BlockHighP(my) - 1, (mx + x) + adjustX] = 0;
+        stage[BlockHighP(my), (mx + x) + adjustX] = 9;
+        tmpTime = 0;
     }
 
     public void BlockSetForStage(int i)
@@ -259,35 +267,19 @@ public class BlockManager : MonoBehaviour
         int mx = (int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.x;
         int my = (int)block.GetComponent<BlockController>().blocks[i].transform.localPosition.y;
 
-        if (my + y < 0)
+        if (stage[BlockHighP(my), (mx + x) + adjustX] != 9)
         {
-            if (stage[BlockHighM(my), (mx + x) + adjustX] != 9)
-            {                         
-                stage[BlockHighM(my) - 1, (mx + x) + adjustX] = 0;
-                                      
-                stage[BlockHighM(my), (mx + x) + adjustX] = block.GetComponent<BlockController>().myIndex;
-            }
-        }
-        else
-        {
-            if (stage[BlockHighP(my), (mx + x) + adjustX] != 9)
-            {
-                stage[BlockHighP(my) - 1, (mx + x) + adjustX] = 0;
-                Debug.Log("stage[" + BlockHighP(my) + "," + ((mx + x) + adjustX) + "]");
-                stage[BlockHighP(my), (mx + x) + adjustX] = block.GetComponent<BlockController>().myIndex;
-            }
+            stage[tPos[i].y, tPos[i].x] = 0;
+            Debug.Log("stage[" + BlockHighP(my) + "," + ((mx + x) + adjustX) + "]");
+            stage[BlockHighP(my), (mx + x) + adjustX] = block.GetComponent<BlockController>().myIndex;
+            tPos[i].x = (mx + x) + adjustX;
+            tPos[i].y = BlockHighP(my);
         }
     }
 
     private int BlockHighP(int my)
     {
         int _y = (my + y + adjustY) - 20;
-        return _y * -1;
-    }
-
-    private int BlockHighM(int my)
-    {
-        int _y = ((my + y) * -1 + adjustY) - 20;
         return _y * -1;
     }
 
@@ -326,4 +318,6 @@ public class BlockManager : MonoBehaviour
             }
         }
     }
+
+
 }

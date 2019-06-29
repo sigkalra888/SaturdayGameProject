@@ -44,13 +44,14 @@ public class BlockController : MonoBehaviour
                 if (blockManager.PosUpdateF())
                 {
                     blockManager.tmpTime = time + blockManager.intarval;
+                    
                     this.gameObject.transform.localPosition = new Vector3(this.gameObject.transform.localPosition.x,
                                                                           this.gameObject.transform.localPosition.y - 1,
                                                                           this.gameObject.transform.localPosition.z);
-                }
-                for (int i = 0; i < 4; ++i)
-                {
-                    blockManager.BlockSetForStage(i);
+                    for (int i = 0; i < 4; ++i)
+                    {
+                        blockManager.BlockSetForStage(i);
+                    }
                 }
             }    
         }
@@ -64,6 +65,10 @@ public class BlockController : MonoBehaviour
                     this.gameObject.transform.localPosition = new Vector3(this.gameObject.transform.localPosition.x - 1,
                                                                       this.gameObject.transform.localPosition.y,
                                                                       this.gameObject.transform.localPosition.z);
+                    for (int i = 0; i < 4; ++i)
+                    {
+                        blockManager.BlockSetForStage(i);
+                    }
                 }
                 
             }
@@ -74,6 +79,10 @@ public class BlockController : MonoBehaviour
                     this.gameObject.transform.localPosition = new Vector3(this.gameObject.transform.localPosition.x + 1,
                                                                       this.gameObject.transform.localPosition.y,
                                                                       this.gameObject.transform.localPosition.z);
+                    for (int i = 0; i < 4; ++i)
+                    {
+                        blockManager.BlockSetForStage(i);
+                    }
                 }
                 
             }

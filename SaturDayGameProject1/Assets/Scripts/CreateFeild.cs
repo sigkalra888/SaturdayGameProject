@@ -6,10 +6,15 @@ using UnityEngine.UI;
 public class CreateFeild : MonoBehaviour
 {
     [SerializeField]
-    private Text feild;
+    private GameObject stageManager;
 
     [SerializeField]
-    private GameObject feildData;
+    private Text field;
+
+    private int fieldCount = 0;
+
+    [SerializeField]
+    private GameObject fieldData;
 
     void Start()
     {
@@ -24,9 +29,11 @@ public class CreateFeild : MonoBehaviour
     {
         for (int i = 0; i < 10; i++)
         {
-            Text feildPre = Instantiate(feild, Vector3.zero, Quaternion.identity);
-            feildPre.transform.SetParent(feildData.transform);
-            feildPre.transform.localPosition = new Vector3(-100 + i * 20, 180 - y * 18, 0);
+            Text fieldPre = Instantiate(field, Vector3.zero, Quaternion.identity);
+            fieldPre.transform.SetParent(fieldData.transform);
+            fieldPre.transform.localPosition = new Vector3(-100 + i * 20, 180 - y * 18, 0);
+            stageManager.GetComponent<StageManager>().fieldText[fieldCount] = fieldPre;
+            fieldCount++;
         }
     }
 }

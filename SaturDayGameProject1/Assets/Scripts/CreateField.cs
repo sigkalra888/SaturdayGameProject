@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CreateFeild : MonoBehaviour
+public class CreateField : MonoBehaviour
 {
+    [HideInInspector]
+    public bool complete = false;
+
     [SerializeField]
     private GameObject stageManager;
 
@@ -23,6 +26,7 @@ public class CreateFeild : MonoBehaviour
         {
             FeildGenerate(i);
         }
+        complete = true;
     }
 
     private void FeildGenerate(int y)
